@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="navbar" class="navbar navbar-default          ace-save-state">
+    <div class="navbar-container ace-save-state" id="navbar-container">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        <div class="navbar-header pull-left">
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    黑龙江大学 宿舍管理系统
+                </small>
+            </a>
+        </div>
+
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="green dropdown-modal">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <i class="ace-icon fa fa-bell icon-animated-bell"></i>
+                        <span class="badge badge-important" th:text="${session.notification.size()}"></span>
+                    </a>
+
+                    <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+                        <li class="dropdown-header">
+                            <i class="ace-icon fa fa-exclamation-triangle"></i>
+                            通知
+                        </li>
+
+                        <li class="dropdown-content">
+                            <ul class="dropdown-menu dropdown-navbar navbar-pink">
+                                <li th:if="${session.notification.get(1)}!=null">
+                                    <a th:href="@{/msgboard}">
+                                        <div class="clearfix">
+                                            <span class="pull-left">
+                                                <i class="btn btn-xs no-hover btn-pink fa fa-comments-o"></i>
+                                                新的评论信息
+                                            </span>
+                                            <span class="pull-right badge badge-info" th:text="${session.notification.get(1)}"></span>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li th:if="${session.notification.get(2)}!=null">
+                                    <a th:href="@{/person}">
+                                        <i class="btn btn-xs btn-primary fa fa-user"></i>
+                                        你是刚创建的账号
+                                    </a>
+                                </li>
+
+                                <li th:if="${session.notification.get(3)}!=null">
+                                    <a th:href="@{/miscellaneous}">
+                                        <div class="clearfix">
+                                            <span class="pull-left">
+                                                <i class="btn btn-xs no-hover btn-success fa fa-tachometer"></i>
+                                                寝室电费已不足
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li th:if="${session.notification.get(4)}!=null">
+                                    <a th:href="@{/miscellaneous}">
+                                        <div class="clearfix">
+                                            <span class="pull-left">
+                                                <i class="btn btn-xs no-hover btn-warning fa fa-exclamation-circle"></i>
+                                                你提交的维修判定为人为请及时上缴维修费
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li th:if="${session.notification.get(5)}!=null">
+                                    <a th:href="@{/studentsignin}">
+                                        <div class="clearfix">
+                                            <span class="pull-left">
+                                                <i class="btn btn-xs no-hover btn-info fa fa-pencil-square-o"></i>
+                                                你今天有一个签到
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="light-blue dropdown-modal">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" th:src="${session.loginuser.getImgPath()}" />
+                        <span class="user-info">
+									<small>欢迎,</small>
+									[[${session.loginuser.getName()}]]
+                        </span>
+
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a th:href="@{/person}">
+                                <i class="ace-icon fa fa-user"></i>
+                                个人信息
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a th:href="@{/quit}">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.navbar-container -->
+</div>
+
+<div id="bottombar" class="footer" >
+    <div class="footer-inner">
+        <div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">黑龙江大学</span>
+							Application &copy; 2020-2021
+						</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

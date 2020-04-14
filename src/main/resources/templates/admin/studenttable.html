@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title> 学生信息 </title>
+
+		<meta name="description" content="Static &amp; Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+		<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		<script src="assets/js/ace-extra.min.js"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="no-skin">
+		<div th:replace="commons/bar::#navbar"></div>
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+			</script>
+
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+				<script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+
+				<ul class="nav nav-list">
+
+					<li class="active open">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								学生管理
+							</span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="active">
+								<a th:href="@{/studenttable}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									学生信息管理
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a th:href="@{/signin}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									签到管理
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text"> 宿舍管理 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a th:href="@{/dormitory}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									宿舍信息管理
+								</a>
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a th:href="@{/msgboard}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									留言板
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+					<li class="">
+						<a th:href="@{/visittable}">
+							<i class="menu-icon fa fa-list-alt"></i>
+							<span class="menu-text"> 来访管理 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a th:href="@{/repair}">
+							<i class="menu-icon fa fa-picture-o"></i>
+							<span class="menu-text"> 宿舍维修管理 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+				</ul><!-- /.nav-list -->
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								主页
+							</li>
+
+							<li class="active">学生信息</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="ace-settings-container" id="ace-settings-container">
+							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+								<i class="ace-icon fa fa-cog bigger-130"></i>
+							</div>
+
+							<div class="ace-settings-box clearfix" id="ace-settings-box">
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<div class="pull-left">
+											<select id="skin-colorpicker" class="hide">
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+											</select>
+										</div>
+										<span>&nbsp; 风格转换</span>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-add-container" autocomplete="off" />
+										<label class="lbl" for="ace-settings-add-container">
+											缩小边框
+										</label>
+									</div>
+								</div><!-- /.pull-left -->
+
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+										<label class="lbl" for="ace-settings-hover"> 子菜单悬停 </label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+										<label class="lbl" for="ace-settings-compact"> 紧凑型侧边栏 </label>
+									</div>
+
+								</div><!-- /.pull-left -->
+							</div><!-- /.ace-settings-box -->
+						</div><!-- /.ace-settings-container -->
+
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="row">
+									<div class="col-xs-12">
+										<h3 class="header smaller lighter blue">
+											学生信息展示
+											<div class="ui-pg-div">
+												<a  onclick="openAddModal()" role="button" class="green" data-toggle="modal">
+												<span class="ui-icon ace-icon fa fa-plus-circle purple" title="添加学生信息">
+												</span>
+												</a>
+											</div>
+										</h3>
+										<div class="clearfix">
+											<div class="pull-right tableTools-container"></div>
+										</div>
+										<div class="table-header">
+										</div>
+										<div>
+											<table id="simple-table" class="table  table-bordered table-hover">
+												<thead>
+													<tr>
+														<th>学号</th>
+														<th>姓名</th>
+														<th>性别</th>
+														<th>寝室号</th>
+														<th>出生日期</th>
+														<th>手机号</th>
+														<th>专业</th>
+														<th>辅导员</th>
+														<th></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="student:${pageInfo.list}">
+														<td th:text="${student.getId()}"></td>
+														<td th:text="${student.getName()}"></td>
+														<td th:text="${student.getSex()}==1?'男':'女'"></td>
+														<td th:text="${student.getDorNumber()}"></td>
+														<td th:text="${student.getBirthday()}"></td>
+														<td th:text="${student.getPhoneNumber()}"></td>
+														<td th:text="${student.getProfession()}"></td>
+														<td th:text="${student.getCounselor()}"></td>
+														<td>
+															<div class="hidden-sm hidden-xs action-buttons">
+																<a href="#" class="green">
+																	<i class="ace-icon fa fa-pencil bigger-130" onclick="openUpdateModal(this)" title="修改学生信息"></i>
+																</a>
+																<a href="#" class="red deleteBtn"  th:attr="del_uri=@{/student/}+${student.getId()}">
+																	<i class="ace-icon fa fa-trash-o bigger-130" title="删除该学生"></i>
+																</a>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="row">
+												<div class="col-sm-9">
+													<p>当前 <span th:text="${pageInfo.pageNum}"></span> 页,总 <span th:text="${pageInfo.pages}"></span> 页,共 <span th:text="${pageInfo.total}"></span> 条记录</p>
+												</div>
+												<div class="col-sm-3">
+													<ul class="pagination">
+														<li th:class="${pageInfo.pageNum}==1?'disabled':''">
+															<a th:href="@{/studenttable(pn=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}">
+																<i class="ace-icon fa fa-angle-double-left"></i>
+															</a>
+														</li>
+
+														<li th:each="num:${pageInfo.getNavigatepageNums()}" th:class="${num==pageInfo.pageNum}?'active':''">
+															<a th:href="@{/studenttable(pn=${num})}"  th:text="${num}"></a>
+														</li>
+
+														<li th:class="${pageInfo.pageNum==pageInfo.pages}?'disabled':''">
+															<a th:href="@{/studenttable(pn=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}">
+																<i class="ace-icon fa fa-angle-double-right"></i>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+
+										<form id="deleteStudentForm" method="post">
+											<input type="hidden" name="_method" value="delete">
+										</form>
+									</div>
+								</div>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						<div id="add-table" class="modal" tabindex="-1" >
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="blue bigger">添加学生信息</h4>
+									</div>
+									<form class="form-horizontal" id="add-form" role="form" th:action="@{/student}" method="post">
+										<div class="modal-body">
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 宿舍号 </label>
+
+												<div class="col-sm-7">
+													<div class="clearfix">
+													<input name="dorNumber" id="dorNumber"  type="text" class="input-sm" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 学生姓名 </label>
+
+												<div class="col-sm-7">
+													<div class="clearfix">
+														<input name="name"  type="text" class="input-sm" />
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 性别 </label>
+
+												<div class="col-sm-7">
+													<select name="sex" id="sex" class="input-mini">
+														<option value="1" th:text="男"></option>
+														<option value="0" th:text="女"></option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 出生日期 </label>
+
+												<div class="col-sm-7" >
+													<input name="birthday"  type="date"  />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 手机号 </label>
+
+												<div class="col-sm-7" >
+													<input name="phoneNumber" id="phoneNumber" type="text" class="input-sm" />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 专业 </label>
+
+												<div class="col-sm-7" >
+													<div class="clearfix">
+													<input name="profession"  type="text" class="input-sm" />
+												</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 辅导员 </label>
+
+												<div class="col-sm-7" >
+													<div class="clearfix">
+													<input name="counselor"  type="text" class="input-sm" />
+												</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-sm" type="reset">
+												<i class="ace-icon fa fa-times"></i>
+												重置
+											</button>
+
+											<button id="add_save_btn" class="btn btn-sm btn-primary" type="submit">
+												<i class="ace-icon fa fa-check"></i>
+												保存
+											</button>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div id="update-table" class="modal" tabindex="-1" >
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="blue bigger">修改学生信息</h4>
+									</div>
+									<form class="form-horizontal" id="update-form" role="form" th:action="@{/student}" method="post">
+										<input type="hidden" name="_method" value="put">
+										<input type="hidden" name="id" id="originalId">
+										<div class="modal-body">
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 宿舍号 </label>
+
+												<div class="col-sm-7">
+													<div class="clearfix">
+													<input name="dorNumber" id="originalDorNumber"  type="text" class="input-sm" />
+												</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 学生姓名 </label>
+
+												<div class="col-sm-7">
+													<input name="name" id="originalName" type="text" class="input-sm" />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 性别 </label>
+
+												<div class="col-sm-7">
+													<select name="sex" id="originalSex" class="input-mini">
+														<option value="1" th:text="男"></option>
+														<option value="0" th:text="女"></option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 出生日期 </label>
+
+												<div class="col-sm-7" >
+													<input name="birthday" id="originalBirthday" type="date"  />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 手机号 </label>
+
+												<div class="col-sm-7" >
+													<input name="phoneNumber" id="originalPhoneNumber" type="text" class="input-sm" />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 专业 </label>
+
+												<div class="col-sm-7" >
+													<div class="clearfix">
+													<input name="profession" id="originalProfession" type="text" class="input-sm" />
+												</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-4 control-label no-padding-right"> 辅导员 </label>
+
+												<div class="col-sm-7" >
+													<div class="clearfix">
+													<input name="counselor" id="originalCounselor" type="text" class="input-sm" />
+												</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-sm" type="reset">
+												<i class="ace-icon fa fa-times"></i>
+												重置
+											</button>
+
+											<button id="update_save_btn" class="btn btn-sm btn-primary" type="submit">
+												<i class="ace-icon fa fa-check"></i>
+												保存
+											</button>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div><!-- /.page-content -->
+				</div>
+			</div><!-- /.main-content -->
+
+			<div th:replace="commons/bar::#bottombar"></div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script src="assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="assets/js/jquery.dataTables.min.js"></script>
+		<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script src="assets/js/dataTables.buttons.min.js"></script>
+		<script src="assets/js/buttons.flash.min.js"></script>
+		<script src="assets/js/buttons.html5.min.js"></script>
+		<script src="assets/js/buttons.print.min.js"></script>
+		<script src="assets/js/buttons.colVis.min.js"></script>
+		<script src="assets/js/dataTables.select.min.js"></script>
+		<script src="assets/js/bootbox.js"></script>
+		<script src="assets/js/jquery.validate.min.js"></script>
+		<script src="assets/js/jquery.maskedinput.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+
+		<script type="text/javascript" th:inline="javascript">
+
+			$(".deleteBtn").click(function(){
+				var r = confirm("是否删除该学生信息");
+				if(r == true) {
+					$("#deleteStudentForm").attr("action", $(this).attr("del_uri")).submit();
+					return false;
+				}
+			});
+
+
+			//校验信息展示
+			// function show_validate_msg(ele,status,msg){
+			// 	//先进行清除
+			// 	$(ele).parent().parent().removeClass("has-success has-error");
+			// 	$(ele).next("div").text("");
+			// 	if("success"==status){
+			// 		$(ele).parent().parent().addClass("has-success");
+			// 		$(ele).next("div").text(msg);
+			// 	}else if("error" == status){
+			// 		$(ele).parent().parent().addClass("has-error");
+			// 		$(ele).next("div").text(msg);
+			// 	}
+			// }
+
+			// //校验宿舍人数是否充足
+			// $("#dorNumber,#originalDorNumber").change(function () {
+			// 	//发送ajax请求
+			// 	var dorNumber = this.value;
+			// 	$.ajax({
+			// 		url:"/checkDorPeople",
+			// 		data:"dorNumber="+dorNumber,
+			// 		type:"POST",
+			// 		success:function (result) {
+			// 			if(100 == result.code){
+			// 				show_validate_msg("#dorNumber","success","");
+			// 				$("#add_save_btn").attr("ajax-va","success");
+			// 				show_validate_msg("#originalDorNumber","success","");
+			// 				$("#update_save_btn").attr("ajax-va","success");
+			// 			}else{
+			// 				show_validate_msg("#dorNumber","error","该宿舍已满");
+			// 				$("#add_save_btn").attr("ajax-va","error");
+			// 				show_validate_msg("#originalDorNumber","error","该宿舍已满");
+			// 				$("#update_save_btn").attr("ajax-va","error");
+			// 			}
+			// 		}
+			// 	})
+			// 	}
+			// )
+
+			$("#add_save_btn").click(function () {
+				if($(this).attr("ajax-va") == "error"){
+					return false;
+				}
+				return true;
+			})
+
+
+			$("#update_save_btn").click(function () {
+				if($(this).attr("ajax-va") == "error"){
+					return false;
+				}
+				return true;
+			})
+
+
+			function openAddModal() {
+				$("#add-table").modal();
+				$("#add-table form")[0].reset();
+				$("#add-table form").find("*").removeClass("has-error has-success");
+				$("#add-table form").find(".help-block").text("");
+			}
+
+
+			function openUpdateModal(obj) {
+				$('#update-table').modal();
+				$("#update-table form")[0].reset();
+				$("#update-table form").find("*").removeClass("has-error has-success");
+				$("#update-table form").find(".help-block").text("");
+				var $td = $(obj).parents('tr').children('td');
+				var id = $td.eq(0).text();
+				var name = $td.eq(1).text();
+				var sex = $td.eq(2).text();
+				var dorNumber = $td.eq(3).text();
+				var birthday = $td.eq(4).text();
+				var phoneNumber = $td.eq(5).text();
+				var profession = $td.eq(6).text();
+				var counselor = $td.eq(7).text();
+				$("#originalId").val(id);
+				$("#originalName").val(name);
+				if(sex=='男')
+					$("#originalSex").val(1);
+				else
+					$("#originalSex").val(0);
+
+				$("#originalDorNumber").val(dorNumber);
+				$("#originalBirthday").val(birthday);
+				$("#originalPhoneNumber").val(phoneNumber);
+				$("#originalProfession").val(profession);
+				$("#originalCounselor").val(counselor);
+			}
+
+
+		</script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript" th:inline="javascript">
+			jQuery(function($) {
+
+				$.mask.definitions['~']='[+-]';
+				$('#phoneNumber').mask('999-9999-9999');
+				$('#originalPhoneNumber').mask('999-9999-9999');
+				$('#dorNumber').mask('999');
+
+				jQuery.validator.addMethod("checkName", function (value, element) {
+					return this.optional(element) || /^.{2,10}$/.test(value);
+				}, "2~10个字符");
+
+
+				jQuery.validator.addMethod("checkDorNumber_1", function (value, element) {
+					var dorNumbers = [[${allDormitorys}]];
+					for(var i=0;i<dorNumbers.length;i++){
+						if(dorNumbers[i].dorNumber==value){
+							return true;
+						}
+					}
+					return false;
+				}, "不存在该寝室");
+
+				jQuery.validator.addMethod("checkDorNumber_2", function (value, element) {
+					var dorNumbers = [[${allDormitorys}]];
+					for(var i=0;i<dorNumbers.length;i++){
+						if(dorNumbers[i].dorNumber==value){
+							if(dorNumbers[i].roomType>dorNumbers[i].people){
+								return true;
+							}
+						}
+					}
+					return false;
+				}, "该寝室人数已满");
+
+				$('#add-form').validate({
+					errorElement: 'div',
+					errorClass: 'help-block',
+					focusInvalid: false,
+					ignore: "",
+					rules: {
+						name: {
+							required: true,
+							checkName: true
+						},
+						dorNumber: {
+							required: true,
+							checkDorNumber_1: true,
+							checkDorNumber_2: true
+						},
+						profession: {
+							checkName: true
+						},
+						counselor: {
+							checkName: true
+						}
+					},
+
+					messages: {
+						name: {
+							required: "必填"
+						},
+						dorNumber: {
+							required: "必填"
+						}
+					},
+					onkeyup:false,
+					focusCleanup:true,
+
+					highlight: function (e) {
+						$(e).closest('.form-group').removeClass('has-success').addClass('has-error');
+					},
+
+					success: function (e) {
+						$(e).closest('.form-group').removeClass('has-error').addClass('has-success');
+						$(e).remove();
+					},
+					errorPlacement: function (error, element) {
+						if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+							var controls = element.closest('div[class*="col-"]');
+							if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+							else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+						}
+						else if(element.is('.select2')) {
+							error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+						}
+						else if(element.is('.chosen-select')) {
+							error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+						}
+						else error.insertAfter(element.parent());
+					}
+				});
+				$('#update-form').validate({
+					errorElement: 'div',
+					errorClass: 'help-block',
+					focusInvalid: false,
+					ignore: "",
+					rules: {
+						name: {
+							required: true,
+							checkName: true
+						},
+						dorNumber: {
+							required: true,
+							checkDorNumber_1: true,
+							checkDorNumber_2: true
+						},
+						profession: {
+							checkName: true
+						},
+						counselor: {
+							checkName: true
+						}
+					},
+
+					messages: {
+						name: {
+							required: "必填"
+						},
+						dorNumber: {
+							required: "必填"
+						}
+					},
+					onkeyup:false,
+					focusCleanup:true,
+
+					highlight: function (e) {
+						$(e).closest('.form-group').removeClass('has-success').addClass('has-error');
+					},
+
+					success: function (e) {
+						$(e).closest('.form-group').removeClass('has-error').addClass('has-success');
+						$(e).remove();
+					},
+					errorPlacement: function (error, element) {
+						if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+							var controls = element.closest('div[class*="col-"]');
+							if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+							else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+						}
+						else if(element.is('.select2')) {
+							error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+						}
+						else if(element.is('.chosen-select')) {
+							error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+						}
+						else error.insertAfter(element.parent());
+					}
+				});
+				//initiate dataTables plugin
+				var myTable = 
+				$('#dynamic-table')
+				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+				.DataTable( {
+					bAutoWidth: false,
+					"aoColumns": [
+					  { "bSortable": false },
+					  null, null,null, null, null,
+					  { "bSortable": false }
+					],
+					"aaSorting": [],
+					
+					
+					//"bProcessing": true,
+			        //"bServerSide": true,
+			        //"sAjaxSource": "http://127.0.0.1/table.php"	,
+			
+					//,
+					//"sScrollY": "200px",
+					//"bPaginate": false,
+			
+					//"sScrollX": "100%",
+					//"sScrollXInner": "120%",
+					//"bScrollCollapse": true,
+					//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+					//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+			
+					//"iDisplayLength": 50
+			
+			
+					select: {
+						style: 'multi'
+					}
+			    } );
+			
+				
+				
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+				//style the message box
+				var defaultCopyAction = myTable.button(1).action();
+				myTable.button(1).action(function (e, dt, button, config) {
+					defaultCopyAction(e, dt, button, config);
+					$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+				});
+				
+				
+				var defaultColvisAction = myTable.button(0).action();
+				myTable.button(0).action(function (e, dt, button, config) {
+					
+					defaultColvisAction(e, dt, button, config);
+					
+					
+					if($('.dt-button-collection > .dropdown-menu').length == 0) {
+						$('.dt-button-collection')
+						.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+						.find('a').attr('href', '#').wrap("<li />")
+					}
+					$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+				});
+			
+				////
+			
+				setTimeout(function() {
+					$($('.tableTools-container')).find('a.dt-button').each(function() {
+						var div = $(this).find(' > div').first();
+						if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+						else $(this).tooltip({container: 'body', title: $(this).text()});
+					});
+				}, 500);
+				
+				
+				
+				
+				
+				myTable.on( 'select', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
+					}
+				} );
+				myTable.on( 'deselect', function ( e, dt, type, index ) {
+					if ( type === 'row' ) {
+						$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
+					}
+				} );
+			
+			
+			
+			
+				/////////////////////////////////
+				//table checkboxes
+				$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+				
+				//select/deselect all rows according to table header checkbox
+				$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+					
+					$('#dynamic-table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) myTable.row(row).select();
+						else  myTable.row(row).deselect();
+					});
+				});
+				
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
+					var row = $(this).closest('tr').get(0);
+					if(this.checked) myTable.row(row).deselect();
+					else myTable.row(row).select();
+				});
+			
+			
+			
+				$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
+					e.stopImmediatePropagation();
+					e.stopPropagation();
+					e.preventDefault();
+				});
+				
+				
+				
+				//And for the first simple table, which doesn't have TableTools or dataTables
+				//select/deselect all rows according to table header checkbox
+				var active_class = 'active';
+				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+					
+					$(this).closest('table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+					});
+				});
+				
+				//select/deselect a row when the checkbox is checked/unchecked
+				$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
+					var $row = $(this).closest('tr');
+					if($row.is('.detail-row ')) return;
+					if(this.checked) $row.addClass(active_class);
+					else $row.removeClass(active_class);
+				});
+			
+				
+			
+				/********************************/
+				//add tooltip for small view action buttons in dropdown menu
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				
+				//tooltip placement on right or left
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					//var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+				
+				
+				
+				
+				/***************/
+				$('.show-details-btn').on('click', function(e) {
+					e.preventDefault();
+					$(this).closest('tr').next().toggleClass('open');
+					$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+				});
+				/***************/
+				
+				
+				
+				
+				
+
+				// //add horizontal scrollbars to a simple table
+				// $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+				//   {
+				// 	horizontal: true,
+				// 	styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+				// 	size: 2000,
+				// 	mouseWheelLock: true
+				//   }
+				// ).css('padding-top', '12px');
+				//
+			
+			})
+		</script>
+	</body>
+</html>
